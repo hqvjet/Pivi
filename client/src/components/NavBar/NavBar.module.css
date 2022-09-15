@@ -1,6 +1,6 @@
 .NavBar {
     position: fixed;
-    background-color: transparent;
+    background-color: gray;
     height: 56px;
     width: 100%;
     display: flex;
@@ -10,7 +10,8 @@
 }
 
 .left {
-
+    display: flex;
+    align-items: center;
 }
 
 .center {
@@ -32,4 +33,16 @@
 #menu {
     font-size: 1.5em;
     margin: 20px
+}
+
+.logoContainer {
+    height: 100%;
+    width: 23%;
+    object-fit: cover;
+}
+
+#logo {
+    margin-top: 17%;
+    width: 100%;
+    height: 100%;
 }

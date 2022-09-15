@@ -1,0 +1,1 @@
+export const LOGO = '/resources/images/Pivi_logo.png'
