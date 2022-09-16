@@ -1,0 +1,12 @@
+.primary {
+    background-color: transparent;
+}
+
+.btn {
+    border: none;
+    width: 70px;
+}
+
+.btn:hover {
+    cursor: pointer;
+}

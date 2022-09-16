@@ -1,1 +1,2 @@
-export const LOGO = '/resources/images/Pivi_logo.png'
+export const LOGO = '/resources/images/Pivi.png'
+export const ANONYMOUS_AVT = '/resources/images/anonymous.jpg'

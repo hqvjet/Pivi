@@ -1,0 +1,1 @@
+export const PH_SEARCHBAR = 'Search...'
