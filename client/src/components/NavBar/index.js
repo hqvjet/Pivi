@@ -10,6 +10,7 @@ import ButtonStyles from '../Button/Button.module.css'
 import {ANONYMOUS_AVT} from "../../constants/images";
 import ImageStyles from '../Image/Image.module.css'
 import Image from "../Image";
+import axios from "axios";
 
 export default function NavBar() {
     const user = {
