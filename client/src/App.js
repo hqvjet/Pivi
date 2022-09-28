@@ -10,7 +10,7 @@ function App() {
           <BrowserRouter>
               <NavBar />
               <Routes>
-                  <Route path='/' element={<HomePage/>} />
+                  <Route path='/:username' element={<HomePage/>} />
               </Routes>
           </BrowserRouter>
       </>
