@@ -9,7 +9,7 @@ export default function Button(props) {
                 className={`${styles.btn} ${props.styles}`}
                 id={props.id}
                 type={props.type}
-                onClick={props.submit}
+                onClick={props.action}
                 style={props.customStyles}
             >
                 {props.children}

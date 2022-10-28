@@ -12,7 +12,7 @@ import ImageStyles from '../Image/Image.module.css'
 import Image from "../Image";
 import axios from "axios";
 
-export default function NavBar() {
+export default function NavBar(props) {
     const user = {
         username: 'Viet Hoang',
         password: 'v1231233',
@@ -46,7 +46,8 @@ export default function NavBar() {
                 <div className={styles.center}>
                     <div className={styles.searchBarContainer}>
                         <SearchBar styles={searchBarStyles.outline} PH={PH_SEARCHBAR}
-                                   id={searchBarStyles['searchBar']}/>
+                                   id={searchBarStyles['searchBar']}
+                                    setSearchText={props.setSearchText}/>
                     </div>
                 </div>
                 <div className={styles.right}>

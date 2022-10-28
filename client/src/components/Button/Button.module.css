@@ -4,9 +4,13 @@
 
 .btn {
     border: none;
-    width: 70px;
 }
 
 .btn:hover {
     cursor: pointer;
+}
+
+.outline {
+    border: 1px solid white;
+    background-color: transparent;
 }

@@ -1,0 +1,97 @@
+.main {
+    background-image: linear-gradient(to bottom right, #42288C, #7F240E);
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 800px;
+    height: 530px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+    opacity: 0.5;
+}
+
+.bgContent {
+    position: absolute;
+    color: white;
+    text-align: center;
+}
+
+.leftSide {
+    width: 55%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rightSide {
+    width: 45%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.rightSideContainer {
+    width: 85%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+}
+
+.topic::after {
+    content: '';
+    display: block;
+    width: 35%;
+    height: 5px;
+    margin-top: 5px;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.input {
+    border-style: none none solid none;
+    background-color: transparent;
+    outline: none;
+    color: white;
+    padding: 10px 0;
+    width: 40%;
+    margin-top: -20px;
+    transition: width 500ms;
+}
+
+.input:focus {
+    width: 100%;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.link {
+    font-size: 0.7em;
+    text-align: right;
+}
+
+.term {
+    font-size: 0.6em;
+}

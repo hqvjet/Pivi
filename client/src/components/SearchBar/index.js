@@ -1,13 +1,21 @@
-import React from "react"
+import React, {useEffect} from "react"
 import Button from "../Button";
 import ButtonStyles from '../Button/Button.module.css'
 import styles from './SearchBar.module.css'
-import axios from "axios";
 
 export default function SearchBar(props) {
 
-    const onSubmitted = () => {
+    const onSubmitted = searchText => {
+        sessionStorage.setItem('keyword', searchText)
+        window.location.href = '/'
+    }
 
+    const handleInput = e => {
+
+        const searchText = document.getElementById(props.id).value
+        if (e.key === 'Enter' && searchText !== '') {
+            onSubmitted(searchText)
+        }
     }
 
     return (
@@ -17,12 +25,14 @@ export default function SearchBar(props) {
                 id={props.id}
                 className={`${styles.searchBar} ${props.styles}`}
                 placeholder={props.PH}
+                defaultValue=''
+                onKeyPress={handleInput}
             />
-            <Button styles={ButtonStyles.primary} type='submit' clicked={onSubmitted}
-                customStyles={{
-                    backgroundColor: '#CCCCCC',
-                    fontSize: '1.3em'
-                }}
+            <Button styles={ButtonStyles.primary} type='button' action={onSubmitted}
+                    customStyles={{
+                        backgroundColor: '#CCCCCC',
+                        fontSize: '1.3em'
+                    }}
             >
                 <i className={`fa-solid fa-magnifying-glass`}></i>
             </Button>

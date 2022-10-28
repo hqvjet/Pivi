@@ -1,0 +1,9 @@
+.main {
+    width: 750px;
+    height: 400px;
+    background-color: red;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-left: 20px;
+    float: left;
+}
