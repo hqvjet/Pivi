@@ -1,3 +1,4 @@
+import uuid
 from os import access
 from src.constants.http_status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_409_CONFLICT
 from flask import Blueprint, app, request, jsonify
@@ -7,6 +8,41 @@ from flask_jwt_extended import jwt_required, create_access_token, create_refresh
 from src.database import Users, db
 
 auth = Blueprint("auth",__name__,url_prefix="/api/v1/auth")
+
+@auth.post('/create_admin')
+def create_admin():
+    username = request.json['username']
+    email = request.json['email']
+    password = request.json['password']
+
+    if len(username) < 3:
+        return jsonify({'error': "User is too short"}), HTTP_400_BAD_REQUEST
+
+    if not username.isalnum() or " " in username:
+        return jsonify({'error': "Username should be alphanumeric, also no spaces"}), HTTP_400_BAD_REQUEST
+
+    if not validators.email(email):
+        return jsonify({'error': "Email is not valid"}), HTTP_400_BAD_REQUEST
+
+    if Users.query.filter_by(email=email).first() is not None:
+        return jsonify({'error': "Email is taken"}), HTTP_409_CONFLICT
+
+    if Users.query.filter_by(username=username).first() is not None:
+        return jsonify({'error': "username is taken"}), HTTP_409_CONFLICT
+
+    pwd_hash = generate_password_hash(password)
+
+    user = Users(id = uuid.uuid4(),username=username, password=pwd_hash, email=email,role="admin")
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify({
+        'message': "User created",
+        'user': {
+            'username': username, "email": email
+        }
+
+    }), HTTP_201_CREATED
 
 @auth.post('/register')
 def register():
@@ -34,7 +70,7 @@ def register():
 
     pwd_hash = generate_password_hash(password)
 
-    user = Users(username=username, password=pwd_hash, email=email)
+    user = Users(id = uuid.uuid4(),username=username, password=pwd_hash, email=email)
     db.session.add(user)
     db.session.commit()
 
@@ -48,10 +84,10 @@ def register():
 
 @auth.post('/login')
 def login():
-    email = request.json.get('email', '')
+    email = request.json.get('username', '')
     password = request.json.get('password', '')
 
-    user = Users.query.filter_by(email=email).first()
+    user = Users.query.filter_by(username=email).first()
 
     if user:
         is_pass_correct = check_password_hash(user.password, password)
@@ -64,6 +100,7 @@ def login():
                 'user': {
                     'refresh': refresh,
                     'access': access,
+                    'id':user.id,
                     'username': user.username,
                     'email': user.email
                 }
@@ -73,5 +110,12 @@ def login():
     return jsonify({'error': 'Wrong credentials'}), HTTP_401_UNAUTHORIZED
 
 @auth.get('/me')
+@jwt_required()
 def me():
-    return {"user":"me"}
+    user_id = get_jwt_identity()
+    user = Users.query.filter_by(id=user_id).first()
+    return jsonify({
+        'id':user.id,
+        'username': user.username,
+        'email': user.email
+    }), HTTP_200_OK
