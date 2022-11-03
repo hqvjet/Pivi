@@ -1,11 +1,12 @@
 .main {
-    width: 400px;
+    width: 500px;
     height: 400px;
     float: left;
-    border-style: none solid none solid;
+    border-style: none none none solid;
     border-color: white;
     display: flex;
     justify-content: center;
+    overflow: scroll;
 }
 
 .container {
