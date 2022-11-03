@@ -26,8 +26,7 @@ export default function VideoCards(props) {
         return (
             <div className={styles.gridItem}
                  onClick={() => {
-                     sessionStorage.setItem('video', JSON.stringify(item))
-                     window.location.href = '/watch'
+                     window.location.href = `watch/v=${item.id.videoId}`
                  }
                  }>
                 <img

@@ -1,4 +1,4 @@
-import {Youtube, StatisticVideo} from "../utils/configAPI";
+import {Youtube, StatisticVideo, getVideoSnippet} from "../utils/configAPI";
 
 export async function getAPI(keyword, type, maxResult) {
     return await new Promise((resolve, reject) => {
@@ -15,6 +15,18 @@ export async function getAPI(keyword, type, maxResult) {
 export async function statisticVideo(videoId) {
     return await new Promise((resolve, reject) => {
         StatisticVideo().get('/videos', {
+            params: {
+                id: videoId,
+            }
+        })
+            .then(res => resolve(res.data))
+            .catch(err => reject(err))
+    })
+}
+
+export async function getVideoDetails(videoId) {
+    return await new Promise((resolve, reject) => {
+        getVideoSnippet().get('/videos', {
             params: {
                 id: videoId,
             }

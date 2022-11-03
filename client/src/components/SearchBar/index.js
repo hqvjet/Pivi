@@ -25,7 +25,7 @@ export default function SearchBar(props) {
                 id={props.id}
                 className={`${styles.searchBar} ${props.styles}`}
                 placeholder={props.PH}
-                defaultValue=''
+                defaultValue={sessionStorage.getItem('keyword')}
                 onKeyPress={handleInput}
             />
             <Button styles={ButtonStyles.primary} type='button' action={onSubmitted}

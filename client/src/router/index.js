@@ -20,7 +20,7 @@ export default function Routers() {
                     <NavBar />
                     <Routes>
                         <Route path='/' element={<Home />}/>
-                        <Route path='/watch' element={<Video/>}/>
+                        <Route path='/watch/v=:videoID' element={<Video/>}/>
                     </Routes>
                 </BrowserRouter>
             </div>

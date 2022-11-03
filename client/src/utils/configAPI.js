@@ -23,3 +23,13 @@ export function StatisticVideo() {
         },
     })
 }
+
+export function getVideoSnippet() {
+    return axios.create({
+        baseURL: "https://www.googleapis.com/youtube/v3",
+        params: {
+            part: "snippet",
+            key: KEY,
+        },
+    })
+}
