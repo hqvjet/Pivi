@@ -13,7 +13,7 @@
     flex-direction: column;
 }
 
-.col1 {
+.row1, .row2 {
     display: flex;
     flex-direction: row;
     margin-top: 100px;

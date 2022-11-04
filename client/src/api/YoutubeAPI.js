@@ -1,4 +1,4 @@
-import {Youtube, StatisticVideo, getVideoSnippet} from "../utils/configAPI";
+import {Youtube, StatisticVideo, getVideoSnippet} from "../utils/YoutubeConfig";
 
 export async function getAPI(keyword, type, maxResult) {
     return await new Promise((resolve, reject) => {

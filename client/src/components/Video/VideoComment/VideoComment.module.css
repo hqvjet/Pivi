@@ -1,0 +1,14 @@
+.main {
+    border: 1px solid white;
+    width: 750px;
+    height: 400px;
+    display: flex;
+    justify-self: center;
+    align-items: center;
+}
+
+.VideoComment {
+    width: 90%;
+    height: 95%;
+    border: 1px solid red;
+}

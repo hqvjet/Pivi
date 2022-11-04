@@ -7,7 +7,7 @@ import styles from '../style/Auth.module.css'
 import signinBG from '../resources/signin_bg.jpg'
 import Button from "../components/Button";
 import buttonStyles from '../components/Button/Button.module.css'
-import {Login, Register} from "../api/AuthAPI";
+import {Login, Register} from "../api/user/AuthAPI";
 
 export default function Auth() {
     //States

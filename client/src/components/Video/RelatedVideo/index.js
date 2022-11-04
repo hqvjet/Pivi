@@ -8,7 +8,7 @@ export default function RelatedVideo(props) {
     return (
         <>
             <div className={styles.main}>
-
+                <div></div>
             </div>
         </>
     )

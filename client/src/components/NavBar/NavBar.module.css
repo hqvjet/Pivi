@@ -1,6 +1,6 @@
 .NavBar {
     position: fixed;
-    background-color: transparent;
+    background-color: rgba(24, 24, 24, 0.7);
     height: 56px;
     width: 100%;
     display: flex;

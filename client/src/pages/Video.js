@@ -5,7 +5,7 @@ import styles from '../style/Video.module.css'
 import VideoContainer from "../components/Video/VideoContainer"
 import VideoDescription from "../components/Video/VideoDescription";
 import RelatedVideo from "../components/Video/RelatedVideo";
-import PlayList from "../components/Video/PlayList";
+import VideoComment from "../components/Video/VideoComment";
 import {getAPI, getVideoDetails, statisticVideo} from "../api/YoutubeAPI";
 import {useParams} from "react-router-dom";
 
@@ -48,7 +48,7 @@ export default function Video(props) {
         <>
             <div className={styles.main}>
                 <div className={styles.container}>
-                    <div className={styles.col1}>
+                    <div className={styles.row1}>
                         <div className={styles.videoContainer}>
                             <VideoContainer isLoading={loading}/>
                         </div>
@@ -57,11 +57,13 @@ export default function Video(props) {
                                               statistic={statistical}/>
                         </div>
                     </div>
-                    <div className={styles.relatedVideo}>
-                        <RelatedVideo/>
-                    </div>
-                    <div className={styles.playList}>
-                        <PlayList/>
+                    <div className={styles.row2}>
+                        <div className={styles.playList}>
+                            <VideoComment isLoading={loading}/>
+                        </div>
+                        <div className={styles.relatedVideo}>
+                            <RelatedVideo isLoading={loading}/>
+                        </div>
                     </div>
                 </div>
             </div>
