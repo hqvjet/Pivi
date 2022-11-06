@@ -1,4 +1,6 @@
-import axios from "axios"
+import axios from "axios";
+
+//Youtube
 
 const REACT_APP_YOUTUBE_API_KEY = 'AIzaSyBQIxJO49_Cvyek5k5vCDJ04nCSkGHNQy8';
 const REACT_APP_BASE_URL = 'https://www.googleapis.com/youtube/v3';
@@ -27,3 +29,12 @@ export const StatisticVideo = axios.create({
         key: REACT_APP_YOUTUBE_API_KEY,
     },
 });
+
+//Authorized
+
+export const Authorization = axios.create({
+    baseURL: '/api/v1/auth',
+    params: {
+
+    }
+})
