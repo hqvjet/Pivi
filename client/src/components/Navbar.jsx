@@ -39,7 +39,7 @@ const Navbar = () => {
                             setClicked(!clicked)
                         }
                     }>
-                {token === '' ? (<>Sign In</>) : (<>Avatar</>)}
+                {token === '' ? (<>Sign In</>) : (<>{JSON.parse(localStorage.getItem('PiviUser')).username}</>)}
             </Button>
             <DropDown/>
         </Stack>

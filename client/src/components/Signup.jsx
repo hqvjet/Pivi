@@ -11,9 +11,12 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 import CopyRight from "./CopyRight";
-
+import {postDataForSignUp} from "../api/SignUp";
+import {IconButton, Snackbar} from "@mui/material";
+import {Fragment, useEffect, useState} from "react";
+import CloseIcon from '@mui/icons-material/Close';
 
 const theme = createTheme({
     palette: {
@@ -22,20 +25,53 @@ const theme = createTheme({
 });
 
 export default function SignUp() {
+
+    const [open, setOpen] = useState(false)
+    const [alert, setAlert] = useState('')
+
+    useEffect(() => {
+        if(localStorage.getItem('PiviUser') !== null)
+           window.location.href = '/'
+    }, [])
+
+    const action = (
+        <Fragment>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={() => setOpen(false)}
+            >
+                <CloseIcon fontSize="small"/>
+            </IconButton>
+        </Fragment>
+    )
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            displayName: data.get('firstName') + ' ' + data.get('lastName'),
-            username: data.get('un'),
-            password: data.get('password'),
-        });
+        if(data.get('email') === '' || data.get('username') === '' || data.get('password') === '')
+            setAlert('Null Value Is Not Allowed!')
+
+        if (data.get('agreed') !== null) {
+            postDataForSignUp(data.get('email'), data.get('username'), data.get('password'))
+                .then(() => {
+                    setAlert('Register Successful, Please Sign In!')
+                })
+                .catch(err => {
+                    setAlert(err.response.data.error)
+                })
+        }
+
+        else
+            setAlert('You Must Agree Our Term And Policy To Register!')
+        setOpen(true)
     };
 
     return (
         <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
+            <Container component="main" maxWidth="xs" sx={{height: '100vh'}}>
+                <CssBaseline/>
                 <Box
                     sx={{
                         marginTop: 8,
@@ -44,33 +80,29 @@ export default function SignUp() {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
+                    <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
+                        <LockOutlinedIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    autoComplete="given-name"
-                                    name="firstName"
-                                    required
-                                    fullWidth
-                                    id="firstName"
-                                    label="First Name"
-                                    autoFocus
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Snackbar
+                                open={open}
+                                autoHideDuration={10000}
+                                message={alert}
+                                onClose={() => setOpen(false)}
+                                action={action}
+                            />
+                            <Grid item xs={12}>
                                 <TextField
                                     required
                                     fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    autoComplete="family-name"
+                                    id="email"
+                                    label="Email"
+                                    name="email"
+                                    autoComplete="email"
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -79,7 +111,7 @@ export default function SignUp() {
                                     fullWidth
                                     id="un"
                                     label="User Name"
-                                    name="un"
+                                    name="username"
                                     autoComplete="username"
                                 />
                             </Grid>
@@ -96,8 +128,8 @@ export default function SignUp() {
                             </Grid>
                             <Grid item xs={12}>
                                 <FormControlLabel
-                                    control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                    label="I want to receive inspiration, marketing promotions and updates via email."
+                                    control={<Checkbox value="agreed" color="primary" name='agreed'/>}
+                                    label="I have read Pivi's Term And Policy and have agreed."
                                 />
                             </Grid>
                         </Grid>
@@ -105,7 +137,7 @@ export default function SignUp() {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={{mt: 3, mb: 2}}
                         >
                             Sign Up
                         </Button>
@@ -118,7 +150,7 @@ export default function SignUp() {
                         </Grid>
                     </Box>
                 </Box>
-                <CopyRight sx={{ mt: 5 }} />
+                <CopyRight sx={{mt: 5}}/>
             </Container>
         </ThemeProvider>
     );
