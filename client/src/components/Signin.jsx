@@ -31,10 +31,10 @@ export default function SignIn() {
     const [alert, setAlert] = useState('')
     const [showPassword, setShowPassword] = useState(false)
 
-    // useEffect(() => {
-    //     if(localStorage.getItem('PiviUser') !== null)
-    //         window.location.href = '/'
-    // }, [])
+    useEffect(() => {
+        if(localStorage.getItem('PiviUser') !== null)
+            window.location.href = '/'
+    }, [])
 
     const action = (
         <Fragment>
@@ -57,8 +57,7 @@ export default function SignIn() {
         else
             postDataForSignIn(data.get('un'), data.get('password'))
                 .then(res => {
-                    console.log(res)
-                    console.log(localStorage.getItem('PiviUser'))
+                    localStorage.setItem('PiviUser', JSON.stringify(res))
                     window.location.href = '/'
                 })
                 .catch(err => setAlert(err.response.data.error))

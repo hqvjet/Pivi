@@ -1,9 +1,6 @@
 import {Channel, StatisticVideo, Video} from "./option";
 
 export async function getSnippetFromAPI(type, keyword) {
-    if (keyword === 'New')
-        keyword = ''
-
     return (await Video.get('/search', {
         params: {
             q: keyword,
