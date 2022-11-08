@@ -1,21 +1,14 @@
-import React, {useState} from "react"
-import {BrowserRouter, Routes, Route} from "react-router-dom"
-import './App.css'
-import HomePage from "./pages/Home"
-import NavBar from "./components/NavBar";
-import Routers from "./router";
-import Auth from "./pages/Auth";
+import Login from "./components/Signin";
+import Routes from "./routes";
 
-function App() {
-    const [token, setToken]= useState(localStorage.getItem('user'))
-    // {token !== null ? <Routers/> : <Auth/>} 
+const App = () => {
 
+    return (
+        <>
+            <Routes/>
+        </>
+    );
 
-  return (
-      <>
-          <Routers/>
-      </>
-  );
 }
 
 export default App;
