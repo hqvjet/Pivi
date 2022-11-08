@@ -8,10 +8,12 @@ import Auth from "./pages/Auth";
 
 function App() {
     const [token, setToken]= useState(localStorage.getItem('user'))
+    // {token !== null ? <Routers/> : <Auth/>} 
+
 
   return (
       <>
-          {token !== null ? <Routers/> : <Auth/>}
+          <Routers/>
       </>
   );
 }
