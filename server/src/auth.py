@@ -4,7 +4,7 @@ from src.constants.http_status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_
 from flask import Blueprint, app, request, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
 import validators
-from flask_jwt_extended import jwt_required, create_access_token, create_refresh_token, get_jwt_identity
+from  flask_jwt_extended  import jwt_required, create_access_token, create_refresh_token, get_jwt_identity
 from src.database import Users, db
 
 auth = Blueprint("auth",__name__,url_prefix="/api/v1/auth")
@@ -83,6 +83,7 @@ def register():
     }), HTTP_201_CREATED
 
 @auth.post('/login')
+# @jwt_required()
 def login():
     email = request.json.get('username', '')
     password = request.json.get('password', '')
@@ -102,7 +103,8 @@ def login():
                     'access': access,
                     'id':user.id,
                     'username': user.username,
-                    'email': user.email
+                    'email': user.email,
+                    'role':user.role
                 }
 
             }), HTTP_200_OK
