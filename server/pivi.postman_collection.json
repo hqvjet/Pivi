@@ -32,7 +32,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\":\"minhphi123\",\n    \"email\":\"abcd@gmail.com\",\n    \"password\":\"password\"\n}",
+					"raw": "{\n    \"username\":\"abc\",\n    \"email\":\"abc@gmail.com\",\n    \"password\":\"password\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -40,12 +40,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8090/api/v1/auth/register",
+					"raw": "http://localhost:8070/api/v1/auth/register",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8090",
+					"port": "8070",
 					"path": [
 						"api",
 						"v1",
@@ -58,11 +58,8 @@
 		},
 		{
 			"name": "login",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
@@ -74,12 +71,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8090/api/v1/auth/login",
+					"raw": "http://localhost:8070/api/v1/auth/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8090",
+					"port": "8070",
 					"path": [
 						"api",
 						"v1",
@@ -149,6 +146,122 @@
 						"v1",
 						"auth",
 						"create_admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-video",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"tittle\":\"How to tan do crush\",\n    \"description\":\"Co cl ma tan duoc\",\n    \"user_id\":\"78dbb0ce-f2c1-4f5e-8898-0230c2482606\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8070/api/v1/videos/create-video",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"v1",
+						"videos",
+						"create-video"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "my-videos",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2Nzk3OTI0NCwianRpIjoiNjNhNDE3OGQtNTc1Mi00M2NhLWEzNWItMzg4MmYzYjQ3ODM4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImNmNThiNzRkLTQ0MzQtNDIzZi05NGY1LTI0MDY0ZjkyYThiMyIsIm5iZiI6MTY2Nzk3OTI0NCwiZXhwIjoxNjY4MDY1NjQ0fQ.ShhV2DtSpTRT5PDBclTpRtX-uOc5qeq3_ME1-8aSdHE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"video_id\":\"d8e4bcef-9947-49c7-82f7-771d65bb323b\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8070/api/v1/videos/like",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"v1",
+						"videos",
+						"like"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "like",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2Nzk3OTI0NCwianRpIjoiNjNhNDE3OGQtNTc1Mi00M2NhLWEzNWItMzg4MmYzYjQ3ODM4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImNmNThiNzRkLTQ0MzQtNDIzZi05NGY1LTI0MDY0ZjkyYThiMyIsIm5iZiI6MTY2Nzk3OTI0NCwiZXhwIjoxNjY4MDY1NjQ0fQ.ShhV2DtSpTRT5PDBclTpRtX-uOc5qeq3_ME1-8aSdHE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"video_id\":\"d8e4bcef-9947-49c7-82f7-771d65bb323b\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8070/api/v1/videos/like",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"v1",
+						"videos",
+						"like"
 					]
 				}
 			},
