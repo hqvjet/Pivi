@@ -63,7 +63,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\":\"abcd@gmail.com\",\n    \"password\":\"password\"\n}",
+					"raw": "{\n    \"username\":\"abc\",\n    \"password\":\"password\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -135,12 +135,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8090/api/v1/auth/create_admin",
+					"raw": "http://localhost:8070/api/v1/auth/create_admin",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8090",
+					"port": "8070",
 					"path": [
 						"api",
 						"v1",
@@ -154,11 +154,21 @@
 		{
 			"name": "create-video",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3MDk5ODg5NiwianRpIjoiNzEwYjNiZjYtN2Y2OS00YTNhLTk1ZjEtNjE0OTQ4NmQ5MjFiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6Ijk0ZDgxYzkyLTFkMzYtNGRiOC1hNTBiLTlhM2FhODE0OTFjZSIsIm5iZiI6MTY3MDk5ODg5NiwiZXhwIjoxNjcxMDg1Mjk2fQ.ggo8wzOrO9kQlxCMMSVCNuslUiSx4ZcyyuuYYn1eL-w",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"tittle\":\"How to tan do crush\",\n    \"description\":\"Co cl ma tan duoc\",\n    \"user_id\":\"78dbb0ce-f2c1-4f5e-8898-0230c2482606\"\n}",
+					"raw": "{\n    \"tittle\":\"How to tan do crush\",\n    \"description\":\"Co cl ma tan duoc\",\n    \"user_id\":\"78dbb0ce-f2c1-4f5e-8898-0230c2482606\",\n    \"url\": \"https://www.youtube.com/watch?v=NVurif4HOl4\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -210,7 +220,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8070/api/v1/videos/like",
+					"raw": "http://localhost:8070/api/v1/videos/my-videos",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -220,7 +230,7 @@
 						"api",
 						"v1",
 						"videos",
-						"like"
+						"my-videos"
 					]
 				}
 			},
@@ -262,6 +272,34 @@
 						"v1",
 						"videos",
 						"like"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8070/api/v1/videos/search?keyword=\"abc\"",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"v1",
+						"videos",
+						"search"
+					],
+					"query": [
+						{
+							"key": "keyword",
+							"value": "\"abc\""
+						}
 					]
 				}
 			},

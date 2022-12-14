@@ -13,8 +13,7 @@ class Users(db.Model):
     username: str
     email: str
     role: str
-    video: list
-    likes: list
+    videos: object
     create_at: datetime
     update_at: datetime
 
@@ -25,10 +24,10 @@ class Users(db.Model):
     password = db.Column(db.Text(), nullable = False)
     role = db.Column(db.String(80),nullable = False, default = "user")
 
-    video = db.relationship("Videos",backref='users', lazy=True)
-    likes = db.relationship("Likes",backref='users', lazy=True)
-    dislikes = db.relationship("DisLikes",backref='users', lazy=True)
-    comments = db.relationship("Comments",backref='users', lazy=True)
+    videos = db.relationship("Videos",backref='Users', lazy=True)
+    likes = db.relationship("Likes",backref='Users', lazy=True)
+    dislikes = db.relationship("DisLikes",backref='Users', lazy=True)
+    comments = db.relationship("Comments",backref='Users', lazy=True)
 
     create_at = db.Column(db.DateTime(), default = datetime.now())
     update_at = db.Column(db.DateTime(), onupdate = datetime.now())
@@ -39,7 +38,6 @@ class Videos(db.Model):
     title: str
     description: str
     url: str
-    user: Users
     likes: list
     comments: list
     create_at: datetime
@@ -51,9 +49,9 @@ class Videos(db.Model):
     description = db.Column(db.Text())
     user_id = db.Column(db.String(250),db.ForeignKey("users.id", onupdate = "CASCADE", ondelete = "CASCADE"),nullable=False)
     
-    likes = db.relationship('Likes', backref='videos', lazy=True)
-    dislikes = db.relationship('DisLikes',backref='videos', lazy=True)
-    comments = db.relationship("Comments",backref='videos', lazy=True)
+    likes = db.relationship('Likes', backref='Videos', lazy=True)
+    dislikes = db.relationship('DisLikes',backref='Videos', lazy=True)
+    comments = db.relationship("Comments",backref='Videos', lazy=True)
 
     user = db.relationship('Users', backref='Videos', viewonly=True, lazy=True)
     
@@ -63,8 +61,8 @@ class Videos(db.Model):
 @dataclass
 class Likes(db.Model):
     id: str
-    user: Users
-    video: Videos
+    user_id: str
+    video_id: str
     create_at: datetime
     update_at: datetime
 
@@ -81,8 +79,8 @@ class Likes(db.Model):
 @dataclass
 class DisLikes(db.Model):
     id: str
-    user: Users
-    video: Videos
+    user_id: str
+    video_id: str
     create_at: datetime
     update_at: datetime
 
@@ -101,8 +99,8 @@ class DisLikes(db.Model):
 @dataclass
 class Comments(db.Model):
     id: str
-    user: Users
-    video: Videos
+    user_id: str
+    video_id: str
     content: str
     create_at: datetime
     update_at: datetime

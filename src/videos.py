@@ -54,7 +54,7 @@ def my_videos():
     user_id = get_jwt_identity()
     user = Users.query.filter_by(id=user_id).first()
     res = []
-    for video in user.video:
+    for video in user.videos:
         res.append({
             'id':video.id,
             'title':video.title,
@@ -63,7 +63,6 @@ def my_videos():
             'create_at':str(video.create_at)
         })
     
-    print(user.video)
     return jsonify(
         videos=res,
     ), HTTP_200_OK
@@ -85,7 +84,7 @@ def search():
             'create_at':str(video.create_at)
         })
     return jsonify(
-            res
+            data=res
         ), HTTP_200_OK
 
 

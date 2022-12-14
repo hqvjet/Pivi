@@ -9,9 +9,9 @@ from src.database import Users, db, Videos, Likes
 import json
 
 
-admin = Blueprint("videos",__name__,url_prefix="/api/v1/videos")
+admin = Blueprint("admin",__name__,url_prefix="/api/v1/admin")
 
-@videos.post('/create-video')
+@admin.post('/create-video')
 @jwt_required()
 def create_videos():
     title = request.json['title']
@@ -68,7 +68,7 @@ def my_videos():
         admin=res,
     ), HTTP_200_OK
 
-@videos.get('/search')
+@admin.get('/search-video')
 def search():
     search = request.args.get('keyword')
     videos = Videos.query.filter(Videos.title.like(f"%{search}%")).all()
@@ -88,6 +88,13 @@ def search():
             res
         ), HTTP_200_OK
 
+@admin.get('/search-user')
+def search():
+    search = request.args.get('keyword')
+    users = Users.query.filter(Users.username.like(f"%{search}%")).all()
+    return jsonify(
+            users
+        ), HTTP_200_OK
 
 
 
