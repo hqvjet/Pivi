@@ -37,14 +37,12 @@ class Videos(db.Model):
     id: str
     title: str
     description: str
-    url: str
     likes: list
     comments: list
     create_at: datetime
     update_at: datetime
 
     id = db.Column(db.String(250),primary_key = True)
-    url = db.Column(db.String(250), nullable = False)
     title = db.Column(db.String(250), nullable = False)
     description = db.Column(db.Text())
     user_id = db.Column(db.String(250),db.ForeignKey("users.id", onupdate = "CASCADE", ondelete = "CASCADE"),nullable=False)

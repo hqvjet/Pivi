@@ -1,7 +1,7 @@
 import uuid
 from os import access
 from src.constants.http_status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_409_CONFLICT
-from flask import Blueprint, app, request, jsonify
+from flask import Blueprint, app, request, jsonify, send_file
 from werkzeug.security import check_password_hash, generate_password_hash
 import validators
 from  flask_jwt_extended  import jwt_required, create_access_token, create_refresh_token, get_jwt_identity
@@ -87,6 +87,74 @@ def search():
             data=res
         ), HTTP_200_OK
 
+@videos.post('/upload')
+@jwt_required()
+def upload():
+    user_id = get_jwt_identity()
+    video = request.files['video']
+    thumbnail = request.files['thumbnail']
+    title = request.form['title']
+    description = request.form['description']
+    id = uuid.uuid4();
+    try:
+        video.save(f"src/static/videos/{id}.mp4")
+        thumbnail.save(f"src/static/thumbnails/{id}.jpg")
+        videos = Videos(id = id, title=title, description=description, user_id=user_id)
+        db.session.add(videos)
+        db.session.commit()
+        return jsonify({
+            'message': "Videos created",
+            'videos': {
+                'title': title, "id": id
+            }
+
+        }), HTTP_201_CREATED
+    except Exception as e:
+        print(e)
+        return jsonify({
+            'message': "Videos not created",
+            'detail': str(e)
+        }), HTTP_400_BAD_REQUEST
 
 
+@videos.get('/all-videos')
+def all_videos():
+    videos = Videos.query.all()
+    res = []
+    for video in videos:
+        res.append({
+            'id':video.id,
+            'title':video.title,
+            'description':video.description,
+            'like':len(video.likes),
+            'comment': 0,
+            'owner':video.user.username,
+            'watch': 0,
+            'create_at':str(video.create_at)
+        })
+    return jsonify(
+            data=res
+        ), HTTP_200_OK
+
+@videos.get('/video/<id>')
+def video(id):
+    video = Videos.query.filter_by(id=id).first()
+    return jsonify({
+        'id':video.id,
+        'title':video.title,
+        'description':video.description,
+        'like':len(video.likes),
+        'comment': 0,
+        'owner':video.user.username,
+        'watch': 0,
+        'create_at':str(video.create_at)
+    }), HTTP_200_OK
+
+@videos.get('/get-thumbnail/<id>')
+def getThumbnail(id):
+    return send_file(f"static/thumbnails/{id}.jpg"), HTTP_200_OK
+
+@videos.get('/get-video/<id>')
+def getvideo(id):
+    return send_file(f"static/videos/{id}.mp4"), HTTP_200_OK
 

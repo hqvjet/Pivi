@@ -12,12 +12,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8090/",
+					"raw": "http://localhost:8070/",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8090",
+					"port": "8070",
 					"path": [
 						""
 					]
@@ -32,7 +32,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\":\"abc\",\n    \"email\":\"abc@gmail.com\",\n    \"password\":\"password\"\n}",
+					"raw": "{\n    \"username\":\"abcd\",\n    \"email\":\"abcd@gmail.com\",\n    \"password\":\"password\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -63,7 +63,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\":\"abc\",\n    \"password\":\"password\"\n}",
+					"raw": "{\n    \"username\":\"abcd\",\n    \"password\":\"password\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -103,12 +103,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8090/api/v1/auth/login/",
+					"raw": "http://localhost:8070/api/v1/auth/login/",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8090",
+					"port": "8070",
 					"path": [
 						"api",
 						"v1",
@@ -127,7 +127,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\":\"admin\",\n    \"email\":\"abcd@gmail.com\",\n    \"password\":\"admin\"\n}",
+					"raw": "{\n    \"username\":\"admin\",\n    \"email\":\"admin@gmail.com\",\n    \"password\":\"admin\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -159,7 +159,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3MDk5ODg5NiwianRpIjoiNzEwYjNiZjYtN2Y2OS00YTNhLTk1ZjEtNjE0OTQ4NmQ5MjFiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6Ijk0ZDgxYzkyLTFkMzYtNGRiOC1hNTBiLTlhM2FhODE0OTFjZSIsIm5iZiI6MTY3MDk5ODg5NiwiZXhwIjoxNjcxMDg1Mjk2fQ.ggo8wzOrO9kQlxCMMSVCNuslUiSx4ZcyyuuYYn1eL-w",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3MTEyODY0MiwianRpIjoiZWJhOGE5M2YtMjg1Yy00YTc5LTg5NzktMWEzZWY1MzVhMzM1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjQ4MjA3NjQzLWI5N2ItNDczZi1iNTQxLWVhNjI1OGU0MGFhMiIsIm5iZiI6MTY3MTEyODY0MiwiZXhwIjoxNjcxMjE1MDQyfQ.N659446xwr4bBEalLc64ow2zsXXcYil3j8SRUiQYzcQ",
 							"type": "string"
 						}
 					]
@@ -167,16 +167,32 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"tittle\":\"How to tan do crush\",\n    \"description\":\"Co cl ma tan duoc\",\n    \"user_id\":\"78dbb0ce-f2c1-4f5e-8898-0230c2482606\",\n    \"url\": \"https://www.youtube.com/watch?v=NVurif4HOl4\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "video",
+							"type": "file",
+							"src": "/home/minhphi/Videos/Screencasts/video1.mp4"
+						},
+						{
+							"key": "title",
+							"value": "Bug game cuc manh",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "Phat hien 1 bug trong file",
+							"type": "text"
+						},
+						{
+							"key": "thumbnail",
+							"type": "file",
+							"src": "/home/minhphi/Pictures/thumb.jpg"
 						}
-					}
+					]
 				},
 				"url": {
-					"raw": "http://localhost:8070/api/v1/videos/create-video",
+					"raw": "http://localhost:8070/api/v1/videos/upload",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -186,7 +202,7 @@
 						"api",
 						"v1",
 						"videos",
-						"create-video"
+						"upload"
 					]
 				}
 			},
@@ -203,7 +219,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2Nzk3OTI0NCwianRpIjoiNjNhNDE3OGQtNTc1Mi00M2NhLWEzNWItMzg4MmYzYjQ3ODM4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImNmNThiNzRkLTQ0MzQtNDIzZi05NGY1LTI0MDY0ZjkyYThiMyIsIm5iZiI6MTY2Nzk3OTI0NCwiZXhwIjoxNjY4MDY1NjQ0fQ.ShhV2DtSpTRT5PDBclTpRtX-uOc5qeq3_ME1-8aSdHE",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3MTAxNzg0OSwianRpIjoiNDJmMjM3YmYtOGIyYy00OTVhLTkzNDEtZjRjMTBhN2FkYWUyIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjE5YTFmNDUzLTJjOWEtNGY3NS05NjgwLTJjNTk0MDM0ZTg1NiIsIm5iZiI6MTY3MTAxNzg0OSwiZXhwIjoxNjcxMTA0MjQ5fQ.m9Y3OiBTGtk6q8cILMXGWq15_pgC4BxCn_nLTkajusA",
 							"type": "string"
 						}
 					]
@@ -283,7 +299,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8070/api/v1/videos/search?keyword=\"abc\"",
+					"raw": "http://localhost:8070/api/v1/videos/search?keyword=tan",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -298,8 +314,105 @@
 					"query": [
 						{
 							"key": "keyword",
-							"value": "\"abc\""
+							"value": "tan"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "video by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8070/api/v1/videos/video/142245b7-6315-475e-8edd-739d3b08fe5e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"v1",
+						"videos",
+						"video",
+						"142245b7-6315-475e-8edd-739d3b08fe5e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-all-videos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8070/api/v1/videos/getvideo?id=video1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"v1",
+						"videos",
+						"getvideo"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "video1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getvideo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8070/api/v1/videos/get-video/142245b7-6315-475e-8edd-739d3b08fe5e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"v1",
+						"videos",
+						"get-video",
+						"142245b7-6315-475e-8edd-739d3b08fe5e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getthumnail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8070/api/v1/videos/get-thumbnail/142245b7-6315-475e-8edd-739d3b08fe5e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"v1",
+						"videos",
+						"get-thumbnail",
+						"142245b7-6315-475e-8edd-739d3b08fe5e"
 					]
 				}
 			},
