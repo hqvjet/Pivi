@@ -14,7 +14,6 @@ class Users(db.Model):
     email: str
     role: str
     videos: object
-    watched: list
     create_at: datetime
     update_at: datetime
 
@@ -25,7 +24,6 @@ class Users(db.Model):
     password = db.Column(db.Text(), nullable = False)
     role = db.Column(db.String(80),nullable = False, default = "user")
 
-    watched = db.relationship('Watch', backref='Users', lazy=True)
     videos = db.relationship("Videos",backref='Users', lazy=True)
     likes = db.relationship("Likes",backref='Users', lazy=True)
     dislikes = db.relationship("DisLikes",backref='Users', lazy=True)
@@ -40,18 +38,20 @@ class Videos(db.Model):
     title: str
     description: str
     likes: list
+    url: str
     dislikes : list
     comments: list
-    watched: list
+    watch: int
     create_at: datetime
     update_at: datetime
 
     id = db.Column(db.String(250),primary_key = True)
+    url = db.Column(db.Text(), nullable = False)
     title = db.Column(db.String(250), nullable = False)
     description = db.Column(db.Text())
     user_id = db.Column(db.String(250),db.ForeignKey("users.id", onupdate = "CASCADE", ondelete = "CASCADE"),nullable=False)
-    
-    watched = db.relationship('Watch', backref='Videos', lazy=True)
+    watch = db.Column(db.Integer(), default = 0)
+
     likes = db.relationship('Likes', backref='Videos', lazy=True)
     dislikes = db.relationship('DisLikes',backref='Videos', lazy=True)
     comments = db.relationship("Comments",backref='Videos', lazy=True)
@@ -113,21 +113,4 @@ class Comments(db.Model):
     create_at = db.Column(db.DateTime(), default = datetime.now())
     update_at = db.Column(db.DateTime(), onupdate = datetime.now())
 
-@dataclass
-class Watch(db.Model):
-    id: str
-    user_id: str
-    video_id: str
-    create_at: datetime
-    update_at: datetime
-
-    id = db.Column(db.String(250),primary_key = True)
-    user_id = db.Column(db.String(250),db.ForeignKey("users.id", onupdate = "CASCADE", ondelete = "CASCADE"),nullable=False)
-    video_id = db.Column(db.String(250),db.ForeignKey("videos.id", onupdate = "CASCADE", ondelete = "CASCADE"),nullable=False)
-
-    video = db.relationship('Videos', backref='Watch', viewonly=True, lazy=True)
-    user = db.relationship('Users', backref='Watch', viewonly=True, lazy=True)
-
-    create_at = db.Column(db.DateTime(), default = datetime.now())
-    update_at = db.Column(db.DateTime(), onupdate = datetime.now())
 

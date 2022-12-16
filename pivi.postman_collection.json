@@ -159,7 +159,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3MTEyODY0MiwianRpIjoiZWJhOGE5M2YtMjg1Yy00YTc5LTg5NzktMWEzZWY1MzVhMzM1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjQ4MjA3NjQzLWI5N2ItNDczZi1iNTQxLWVhNjI1OGU0MGFhMiIsIm5iZiI6MTY3MTEyODY0MiwiZXhwIjoxNjcxMjE1MDQyfQ.N659446xwr4bBEalLc64ow2zsXXcYil3j8SRUiQYzcQ",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3MTE5NjE2MiwianRpIjoiNGJhYzExZDYtMzA0OC00Yjk3LWEyNTEtMjg2MTY4Y2VjZmE4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjY5MmYzODRkLTkwYTgtNDFkNC1iN2EzLTYyYTQ4Y2IwYzEyNSIsIm5iZiI6MTY3MTE5NjE2MiwiZXhwIjoxNjcxMjgyNTYyfQ.i1LTXHNv6sblaV2Pmat2xMqdiEfl1roUMS_XYalmm6k",
 							"type": "string"
 						}
 					]
@@ -172,7 +172,7 @@
 						{
 							"key": "video",
 							"type": "file",
-							"src": "/home/minhphi/Videos/Screencasts/video1.mp4"
+							"src": "/home/minhphi/Videos/Screencasts/Screencast from 19-11-2022 13:05:36.webm"
 						},
 						{
 							"key": "title",
@@ -187,7 +187,7 @@
 						{
 							"key": "thumbnail",
 							"type": "file",
-							"src": "/home/minhphi/Pictures/thumb.jpg"
+							"src": "/home/minhphi/Pictures/Screenshots/Screenshot from 2022-12-16 01-03-07.png"
 						}
 					]
 				},
@@ -219,7 +219,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3MTAxNzg0OSwianRpIjoiNDJmMjM3YmYtOGIyYy00OTVhLTkzNDEtZjRjMTBhN2FkYWUyIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjE5YTFmNDUzLTJjOWEtNGY3NS05NjgwLTJjNTk0MDM0ZTg1NiIsIm5iZiI6MTY3MTAxNzg0OSwiZXhwIjoxNjcxMTA0MjQ5fQ.m9Y3OiBTGtk6q8cILMXGWq15_pgC4BxCn_nLTkajusA",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3MTE5NjE2MiwianRpIjoiNGJhYzExZDYtMzA0OC00Yjk3LWEyNTEtMjg2MTY4Y2VjZmE4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjY5MmYzODRkLTkwYTgtNDFkNC1iN2EzLTYyYTQ4Y2IwYzEyNSIsIm5iZiI6MTY3MTE5NjE2MiwiZXhwIjoxNjcxMjgyNTYyfQ.i1LTXHNv6sblaV2Pmat2xMqdiEfl1roUMS_XYalmm6k",
 							"type": "string"
 						}
 					]
@@ -424,7 +424,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8070/api/v1/videos/get-video/142245b7-6315-475e-8edd-739d3b08fe5e",
+					"raw": "http://localhost:8070/api/v1/videos/all-videos",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -434,8 +434,7 @@
 						"api",
 						"v1",
 						"videos",
-						"get-video",
-						"142245b7-6315-475e-8edd-739d3b08fe5e"
+						"all-videos"
 					]
 				}
 			},
@@ -447,7 +446,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8070/api/v1/videos/getvideo?id=video1",
+					"raw": "http://localhost:8070/api/v1/videos/get-video/8cd6a98c-2734-4a65-9676-78d8780cfc83",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -457,13 +456,8 @@
 						"api",
 						"v1",
 						"videos",
-						"getvideo"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "video1"
-						}
+						"get-video",
+						"8cd6a98c-2734-4a65-9676-78d8780cfc83"
 					]
 				}
 			},
@@ -488,6 +482,17 @@
 						"get-thumbnail",
 						"142245b7-6315-475e-8edd-739d3b08fe5e"
 					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload-cloud",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
 				}
 			},
 			"response": []

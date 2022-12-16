@@ -6,8 +6,11 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy import func
 import validators
 from  flask_jwt_extended  import jwt_required, create_access_token, create_refresh_token, get_jwt_identity
-from src.database import Users, db, Videos, Likes, DisLikes, Watch, Comments
+from src.database import Users, db, Videos, Likes, DisLikes, Comments
 import json
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 
 videos = Blueprint("videos",__name__,url_prefix="/api/v1/videos")
@@ -25,7 +28,7 @@ def upload():
     try:
         video.save(f"src/static/videos/{id}.mp4")
         thumbnail.save(f"src/static/thumbnails/{id}.jpg")
-        videos = Videos(id = id, title=title, description=description, user_id=user_id)
+        videos = Videos(id = id,url=f"{id}", title=title, description=description, user_id=user_id)
         db.session.add(videos)
         db.session.commit()
         return jsonify({
@@ -41,6 +44,22 @@ def upload():
             'message': "Videos not created",
             'detail': str(e)
         }), HTTP_400_BAD_REQUEST
+
+# Upload to cloudinary
+
+@videos.post("/upload-cloud")
+def upload_file():
+  cloudinary.config(cloud_name = os.getenv('CLOUD_NAME'), 
+          api_key=os.getenv('API_KEY'), 
+          api_secret=os.getenv('API_SECRET'))
+  upload_result = None
+  if request.method == 'POST':
+    file_to_upload = request.files['file']
+    if file_to_upload:
+      upload_result = cloudinary.uploader.upload(file_to_upload)
+      return jsonify(upload_result)
+
+
 # Read
 @videos.get('/all-videos')
 def all_videos():
@@ -54,7 +73,7 @@ def all_videos():
             'like':len(video.likes),
             'comment': len(video.comments),
             'owner':video.user.username,
-            'watch': len(video.watched),
+            'watch': video.watch,
             'create_at':str(video.create_at)
         })
     return jsonify(
@@ -205,6 +224,7 @@ def comment():
         'message': "Commented",
     }), HTTP_201_CREATED
 
+#  Delete comment 
 
 
 @videos.get('/my-videos')
@@ -221,7 +241,7 @@ def my_videos():
             'like':len(video.likes),
             'dislike':len(video.dislikes),
             'comments':len(video.comments),
-            'watched':len(video.watched),
+            'watched':video.watch,
             'create_at':str(video.create_at)
         })
 
@@ -242,7 +262,7 @@ def search():
             'like':len(video.likes),
             'comment': 0,
             'owner':video.user.username,
-            'watch': len(video.watched),
+            'watch': video.watch,
             'create_at':str(video.create_at)
         })
     return jsonify(
@@ -261,20 +281,18 @@ def video(id):
         'like':len(video.likes),
         'comment': len(video.comments),
         'owner':video.user.username,
-        'watch': len(video.watched),
+        'watch': video.watch,
         'create_at':str(video.create_at)
     }), HTTP_200_OK
 
 @videos.get('/get-thumbnail/<id>')
-@jwt_required()
 def getThumbnail(id):
-    user_id = get_jwt_identity()
-    watched = Watch(user_id=user_id, video_id=id)
-    db.session.add(watched)
-    db.session.commit()
     return send_file(f"static/thumbnails/{id}.jpg"), HTTP_200_OK
 
 @videos.get('/get-video/<id>')
 def getvideo(id):
+    video = Videos.query.filter_by(id=id).first()
+    video.watch = video.watch + 1
+    db.session.commit()
     return send_file(f"static/videos/{id}.mp4"), HTTP_200_OK
 
