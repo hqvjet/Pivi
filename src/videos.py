@@ -3,90 +3,16 @@ from os import access
 from src.constants.http_status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_409_CONFLICT
 from flask import Blueprint, app, request, jsonify, send_file
 from werkzeug.security import check_password_hash, generate_password_hash
+from sqlalchemy import func
 import validators
 from  flask_jwt_extended  import jwt_required, create_access_token, create_refresh_token, get_jwt_identity
-from src.database import Users, db, Videos, Likes
+from src.database import Users, db, Videos, Likes, DisLikes, Watch, Comments
 import json
 
 
 videos = Blueprint("videos",__name__,url_prefix="/api/v1/videos")
-
-@videos.post('/create-video')
-@jwt_required()
-def create_videos():
-    title = request.json['title']
-    description = request.json['description']
-    user_id = get_jwt_identity()
-    url = request.json['url']
-    id = uuid.uuid4();
-    
-    videos = Videos(id = id,url=url ,title=title, description=description, user_id=user_id)
-    db.session.add(videos)
-    db.session.commit()
-
-    return jsonify({
-        'message': "Videos created",
-        'videos': {
-            'title': title, "id": id
-        }
-
-    }), HTTP_201_CREATED
-
-@videos.post('/like')
-@jwt_required()
-def like():
-    user_id = get_jwt_identity()
-    videos_id = request.json['video_id']
-    
-    user = Users.query.filter_by(id = user_id).first()
-    video = Videos.query.filter_by(id=videos_id).first()
-    
-    video.likes.append(user)
-    
-    db.session.commit()
-    return jsonify({
-        'message': "Liked",
-    }), HTTP_201_CREATED
-
-@videos.get('/my-videos')
-@jwt_required()
-def my_videos():
-    user_id = get_jwt_identity()
-    user = Users.query.filter_by(id=user_id).first()
-    res = []
-    for video in user.videos:
-        res.append({
-            'id':video.id,
-            'title':video.title,
-            'description':video.description,
-            'like':len(video.likes),
-            'create_at':str(video.create_at)
-        })
-    
-    return jsonify(
-        videos=res,
-    ), HTTP_200_OK
-
-@videos.get('/search')
-def search():
-    search = request.args.get('keyword')
-    videos = Videos.query.filter(Videos.title.like(f"%{search}%")).all()
-    res = []
-    for video in videos:
-        res.append({
-            'id':video.id,
-            'title':video.title,
-            'description':video.description,
-            'like':len(video.likes),
-            'comment': 0,
-            'owner':video.user.username,
-            'watch': 0,
-            'create_at':str(video.create_at)
-        })
-    return jsonify(
-            data=res
-        ), HTTP_200_OK
-
+# CRUD
+# Create
 @videos.post('/upload')
 @jwt_required()
 def upload():
@@ -115,11 +41,198 @@ def upload():
             'message': "Videos not created",
             'detail': str(e)
         }), HTTP_400_BAD_REQUEST
-
-
+# Read
 @videos.get('/all-videos')
 def all_videos():
-    videos = Videos.query.all()
+    videos = Videos.query.order_by(func.random()).all()
+    res = []
+    for video in videos:
+        res.append({
+            'id':video.id,
+            'title':video.title,
+            'description':video.description,
+            'like':len(video.likes),
+            'comment': len(video.comments),
+            'owner':video.user.username,
+            'watch': len(video.watched),
+            'create_at':str(video.create_at)
+        })
+    return jsonify(
+            data=res
+        ), HTTP_200_OK
+
+# Update
+@videos.put('/update/<id>')
+@jwt_required()
+def update(id):
+    user_id = get_jwt_identity()
+    video = Videos.query.filter_by(id=id).first()
+    if video:
+        if video.user_id == user_id:
+            title = request.form['title']
+            description = request.form['description']
+            video.title = title
+            video.description = description
+            db.session.commit()
+            return jsonify({
+                'message': "Videos updated",
+                'videos': {
+                    'title': title, "id": id
+                }
+
+            }), HTTP_201_CREATED
+        else:
+            return jsonify({
+                'message': "Videos not updated",
+                'detail': "You are not the owner of this video"
+            }), HTTP_400_BAD_REQUEST
+    else:
+        return jsonify({
+            'message': "Videos not updated",
+            'detail': "Video not found"
+        }), HTTP_400_BAD_REQUEST
+# Delete
+@videos.delete('/delete/<id>')
+@jwt_required()
+def delete(id):
+    user_id = get_jwt_identity()
+    video = Videos.query.filter_by(id=id).first()
+    if video:
+        if video.user_id == user_id:
+            db.session.delete(video)
+            db.session.commit()
+            return jsonify({
+                'message': "Videos deleted",
+                'videos': {
+                    'id': id
+                }
+
+            }), HTTP_201_CREATED
+        else:
+            return jsonify({
+                'message': "Videos not deleted",
+                'detail': "You are not the owner of this video"
+            }), HTTP_400_BAD_REQUEST
+    else:
+        return jsonify({
+            'message': "Videos not deleted",
+            'detail': "Video not found"
+        }), HTTP_400_BAD_REQUEST
+
+
+# Like
+@videos.post('/like/<id>')
+@jwt_required()
+def like(id):
+    user_id = get_jwt_identity()
+    video = Videos.query.filter_by(id=id).first()
+    if video:
+        like = Likes.query.filter_by(user_id=user_id, video_id=id).first()
+        if like:
+            db.session.delete(like)
+            db.session.commit()
+            return jsonify({
+                'message': "Videos unliked",
+                'videos': {
+                    'id': id
+                }
+
+            }), HTTP_201_CREATED
+        else:
+            like = Likes(id=uuid.uuid4(),user_id=user_id, video_id=id)
+            db.session.add(like)
+            db.session.commit()
+            return jsonify({
+                'message': "Videos liked",
+                'videos': {
+                    'id': id
+                }
+
+            }), HTTP_201_CREATED
+    else:
+        return jsonify({
+            'message': "Videos not liked",
+            'detail': "Video not found"
+        }), HTTP_400_BAD_REQUEST
+
+# DisLike
+@videos.post('/dislike/<id>')
+@jwt_required()
+def dislike(id):
+    user_id = get_jwt_identity()
+    video = Videos.query.filter_by(id=id).first()
+    if video:
+        dislike = DisLikes.query.filter_by(user_id=user_id, video_id=id).first()
+        if dislike:
+            db.session.delete(dislike)
+            db.session.commit()
+            return jsonify({
+                'message': "Videos undisliked",
+                'videos': {
+                    'id': id
+                }
+
+            }), HTTP_201_CREATED
+        else:
+            dislike = DisLikes(id=uuid.uuid4(), user_id=user_id, video_id=id)
+            db.session.add(dislike)
+            db.session.commit()
+            return jsonify({
+                'message': "Videos disliked",
+                'videos': {
+                    'id': id
+                }
+
+            }), HTTP_201_CREATED
+    else:
+        return jsonify({
+            'message': "Videos not disliked",
+            'detail': "Video not found"
+        }), HTTP_400_BAD_REQUEST
+
+
+@videos.post('/comment')
+@jwt_required()
+def comment():
+    user_id = get_jwt_identity()
+    videos_id = request.json['video_id']
+    content = request.json['content']
+    id = uuid.uuid4();
+    comment = Comments(id=id, user_id=user_id, video_id=videos_id, content=content)
+    db.session.add(comment)
+    db.session.commit()
+    return jsonify({
+        'message': "Commented",
+    }), HTTP_201_CREATED
+
+
+
+@videos.get('/my-videos')
+@jwt_required()
+def my_videos():
+    user_id = get_jwt_identity()
+    user = Users.query.filter_by(id=user_id).first()
+    res = []
+    for video in user.videos:
+        res.append({
+            'id':video.id,
+            'title':video.title,
+            'description':video.description,
+            'like':len(video.likes),
+            'dislike':len(video.dislikes),
+            'comments':len(video.comments),
+            'watched':len(video.watched),
+            'create_at':str(video.create_at)
+        })
+
+    return jsonify(
+        videos=res,
+    ), HTTP_200_OK
+
+@videos.get('/search')
+def search():
+    search = request.args.get('keyword')
+    videos = Videos.query.filter(Videos.title.like(f"%{search}%")).all()
     res = []
     for video in videos:
         res.append({
@@ -129,12 +242,14 @@ def all_videos():
             'like':len(video.likes),
             'comment': 0,
             'owner':video.user.username,
-            'watch': 0,
+            'watch': len(video.watched),
             'create_at':str(video.create_at)
         })
     return jsonify(
             data=res
         ), HTTP_200_OK
+
+
 
 @videos.get('/video/<id>')
 def video(id):
@@ -144,14 +259,19 @@ def video(id):
         'title':video.title,
         'description':video.description,
         'like':len(video.likes),
-        'comment': 0,
+        'comment': len(video.comments),
         'owner':video.user.username,
-        'watch': 0,
+        'watch': len(video.watched),
         'create_at':str(video.create_at)
     }), HTTP_200_OK
 
 @videos.get('/get-thumbnail/<id>')
+@jwt_required()
 def getThumbnail(id):
+    user_id = get_jwt_identity()
+    watched = Watch(user_id=user_id, video_id=id)
+    db.session.add(watched)
+    db.session.commit()
     return send_file(f"static/thumbnails/{id}.jpg"), HTTP_200_OK
 
 @videos.get('/get-video/<id>')

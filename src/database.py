@@ -14,6 +14,7 @@ class Users(db.Model):
     email: str
     role: str
     videos: object
+    watched: list
     create_at: datetime
     update_at: datetime
 
@@ -24,6 +25,7 @@ class Users(db.Model):
     password = db.Column(db.Text(), nullable = False)
     role = db.Column(db.String(80),nullable = False, default = "user")
 
+    watched = db.relationship('Watch', backref='Users', lazy=True)
     videos = db.relationship("Videos",backref='Users', lazy=True)
     likes = db.relationship("Likes",backref='Users', lazy=True)
     dislikes = db.relationship("DisLikes",backref='Users', lazy=True)
@@ -38,7 +40,9 @@ class Videos(db.Model):
     title: str
     description: str
     likes: list
+    dislikes : list
     comments: list
+    watched: list
     create_at: datetime
     update_at: datetime
 
@@ -47,6 +51,7 @@ class Videos(db.Model):
     description = db.Column(db.Text())
     user_id = db.Column(db.String(250),db.ForeignKey("users.id", onupdate = "CASCADE", ondelete = "CASCADE"),nullable=False)
     
+    watched = db.relationship('Watch', backref='Videos', lazy=True)
     likes = db.relationship('Likes', backref='Videos', lazy=True)
     dislikes = db.relationship('DisLikes',backref='Videos', lazy=True)
     comments = db.relationship("Comments",backref='Videos', lazy=True)
@@ -67,9 +72,6 @@ class Likes(db.Model):
     id = db.Column(db.String(250),primary_key = True)
     video_id = db.Column(db.String(250),db.ForeignKey("videos.id", onupdate = "CASCADE", ondelete = "CASCADE"),nullable=False)
     user_id = db.Column(db.String(250),db.ForeignKey("users.id", onupdate = "CASCADE", ondelete = "CASCADE" ),nullable=False)
-    
-    video = db.relationship('Videos', backref='Likes', viewonly=True, lazy=True)
-    user = db.relationship('Users', backref='Likes', viewonly=True, lazy=True)
 
     create_at = db.Column(db.DateTime(), default = datetime.now())
     update_at = db.Column(db.DateTime(), onupdate = datetime.now())
@@ -85,9 +87,6 @@ class DisLikes(db.Model):
     id = db.Column(db.String(250),primary_key = True)
     user_id = db.Column(db.String(250),db.ForeignKey("users.id", onupdate = "CASCADE", ondelete = "CASCADE" ),nullable=False)
     video_id = db.Column(db.String(250),db.ForeignKey("videos.id", onupdate = "CASCADE", ondelete = "CASCADE" ),nullable=False)
-
-    video = db.relationship('Videos', backref='DisLikes', viewonly=True, lazy=True)
-    user = db.relationship('Users', backref='DisLikes', viewonly=True, lazy=True)
 
     create_at = db.Column(db.DateTime(), default = datetime.now())
     update_at = db.Column(db.DateTime(), onupdate = datetime.now())
@@ -110,6 +109,24 @@ class Comments(db.Model):
 
     video = db.relationship('Videos', backref='Comments', viewonly=True, lazy=True)
     user = db.relationship('Users', backref='Comments', viewonly=True, lazy=True)
+
+    create_at = db.Column(db.DateTime(), default = datetime.now())
+    update_at = db.Column(db.DateTime(), onupdate = datetime.now())
+
+@dataclass
+class Watch(db.Model):
+    id: str
+    user_id: str
+    video_id: str
+    create_at: datetime
+    update_at: datetime
+
+    id = db.Column(db.String(250),primary_key = True)
+    user_id = db.Column(db.String(250),db.ForeignKey("users.id", onupdate = "CASCADE", ondelete = "CASCADE"),nullable=False)
+    video_id = db.Column(db.String(250),db.ForeignKey("videos.id", onupdate = "CASCADE", ondelete = "CASCADE"),nullable=False)
+
+    video = db.relationship('Videos', backref='Watch', viewonly=True, lazy=True)
+    user = db.relationship('Users', backref='Watch', viewonly=True, lazy=True)
 
     create_at = db.Column(db.DateTime(), default = datetime.now())
     update_at = db.Column(db.DateTime(), onupdate = datetime.now())
