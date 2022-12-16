@@ -253,6 +253,50 @@
 			"response": []
 		},
 		{
+			"name": "liked-videos",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3MTE5NjE2MiwianRpIjoiNGJhYzExZDYtMzA0OC00Yjk3LWEyNTEtMjg2MTY4Y2VjZmE4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjY5MmYzODRkLTkwYTgtNDFkNC1iN2EzLTYyYTQ4Y2IwYzEyNSIsIm5iZiI6MTY3MTE5NjE2MiwiZXhwIjoxNjcxMjgyNTYyfQ.i1LTXHNv6sblaV2Pmat2xMqdiEfl1roUMS_XYalmm6k",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"video_id\":\"d8e4bcef-9947-49c7-82f7-771d65bb323b\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8070/api/v1/videos/liked",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"v1",
+						"videos",
+						"liked"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "like",
 			"request": {
 				"auth": {
@@ -260,7 +304,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3MTE4NDcyMywianRpIjoiM2E0NThmNTUtMDQ5Yi00NWE4LWIzZWQtZGQ5MjU1MDlmMTNmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjcwYzIyOWM5LWZlNTQtNDYzNS05ZTEzLTE2ZTE0ZTIyYTRlMCIsIm5iZiI6MTY3MTE4NDcyMywiZXhwIjoxNjcxMjcxMTIzfQ.3aaGrpoCGudqRr9lD2AX3Was3ECZl-Hr-d4LJrO0_RQ",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3MTE5NjE2MiwianRpIjoiNGJhYzExZDYtMzA0OC00Yjk3LWEyNTEtMjg2MTY4Y2VjZmE4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjY5MmYzODRkLTkwYTgtNDFkNC1iN2EzLTYyYTQ4Y2IwYzEyNSIsIm5iZiI6MTY3MTE5NjE2MiwiZXhwIjoxNjcxMjgyNTYyfQ.i1LTXHNv6sblaV2Pmat2xMqdiEfl1roUMS_XYalmm6k",
 							"type": "string"
 						}
 					]
@@ -272,7 +316,7 @@
 					"formdata": []
 				},
 				"url": {
-					"raw": "http://localhost:8070/api/v1/videos/like/3ac3c0dd-1d6d-4b18-a52a-06aca69c0ecb",
+					"raw": "http://localhost:8070/api/v1/videos/like/2ea92198-0a07-4181-8985-371b89e30332",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -283,7 +327,7 @@
 						"v1",
 						"videos",
 						"like",
-						"3ac3c0dd-1d6d-4b18-a52a-06aca69c0ecb"
+						"2ea92198-0a07-4181-8985-371b89e30332"
 					]
 				}
 			},
@@ -373,7 +417,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8070/api/v1/videos/search?keyword=tan",
+					"raw": "http://localhost:8070/api/v1/videos/search?keyword=bug",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -388,7 +432,7 @@
 					"query": [
 						{
 							"key": "keyword",
-							"value": "tan"
+							"value": "bug"
 						}
 					]
 				}
@@ -488,11 +532,35 @@
 		},
 		{
 			"name": "upload-cloud",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/home/minhphi/Pictures/Screenshots/Screenshot from 2022-12-15 22-10-46.png"
+						}
+					]
+				},
 				"url": {
-					"raw": ""
+					"raw": "http://localhost:8070/api/v1/videos/upload-cloud",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"v1",
+						"videos",
+						"upload-cloud"
+					]
 				}
 			},
 			"response": []

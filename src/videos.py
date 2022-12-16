@@ -8,9 +8,9 @@ import validators
 from  flask_jwt_extended  import jwt_required, create_access_token, create_refresh_token, get_jwt_identity
 from src.database import Users, db, Videos, Likes, DisLikes, Comments
 import json
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
+# import cloudinary
+# import cloudinary.uploader
+# import cloudinary.api
 
 
 videos = Blueprint("videos",__name__,url_prefix="/api/v1/videos")
@@ -47,18 +47,27 @@ def upload():
 
 # Upload to cloudinary
 
-@videos.post("/upload-cloud")
-def upload_file():
-  cloudinary.config(cloud_name = os.getenv('CLOUD_NAME'), 
-          api_key=os.getenv('API_KEY'), 
-          api_secret=os.getenv('API_SECRET'))
-  upload_result = None
-  if request.method == 'POST':
-    file_to_upload = request.files['file']
-    if file_to_upload:
-      upload_result = cloudinary.uploader.upload(file_to_upload)
-      return jsonify(upload_result)
+# @videos.post("/upload-cloud")
+# def upload_file():
+  # cloudinary.config(cloud_name = os.getenv('CLOUD_NAME'), 
+          # api_key=os.getenv('API_KEY'), 
+          # api_secret=os.getenv('API_SECRET'))
+  # upload_result = None
+  # if request.method == 'POST':
+    # file_to_upload = request.files['file']
+    # if file_to_upload:
+      # upload_result = cloudinary.uploader.upload(file_to_upload)
+      # return jsonify(upload_result)
 
+# Liked videos
+@videos.get("/liked")
+@jwt_required()
+def liked_videos():
+    user_id = get_jwt_identity()
+    videos = Videos.query.join(Likes).filter(Likes.user_id == user_id).all()
+    return jsonify(
+        videos
+    ), HTTP_200_OK
 
 # Read
 @videos.get('/all-videos')
