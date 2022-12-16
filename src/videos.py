@@ -274,6 +274,9 @@ def search():
 @videos.get('/video/<id>')
 def video(id):
     video = Videos.query.filter_by(id=id).first()
+    video.watch = video.watch + 1
+    db.session.commit()
+
     return jsonify({
         'id':video.id,
         'title':video.title,
@@ -291,8 +294,8 @@ def getThumbnail(id):
 
 @videos.get('/get-video/<id>')
 def getvideo(id):
-    video = Videos.query.filter_by(id=id).first()
-    video.watch = video.watch + 1
-    db.session.commit()
+    # video = Videos.query.filter_by(id=id).first()
+    # video.watch = video.watch + 1
+    # db.session.commit()
     return send_file(f"static/videos/{id}.mp4"), HTTP_200_OK
 
