@@ -65,8 +65,21 @@ def upload():
 def liked_videos():
     user_id = get_jwt_identity()
     videos = Videos.query.join(Likes).filter(Likes.user_id == user_id).all()
+    res = []
+    for video in videos:
+        res.append({
+            "id": video.id,
+            "title": video.title,
+            "description": video.description,
+            "url": video.url,
+            "user_id": video.user_id,
+            "watch": video.watch,
+            "likes": len(video.likes),
+            "dislikes": len(video.dislikes),
+            "comments": len(video.comments)
+        })
     return jsonify(
-        videos
+        videos=res
     ), HTTP_200_OK
 
 # Read
@@ -291,7 +304,8 @@ def video(id):
         'title':video.title,
         'description':video.description,
         'like':len(video.likes),
-        'comment': len(video.comments),
+        'dislike':len(video.dislikes),
+        'comment': video.comments,
         'owner':video.user.username,
         'watch': video.watch,
         'create_at':str(video.create_at)
