@@ -1,12 +1,12 @@
 from flask import Flask
 import os
 from src.auth import auth
+from src.admin import admin
 from src.videos import videos
 from src.bookmarks import bookmarks
 from src.database import db
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
-import cloudinary
 
 def create_app(test_config=None):
     app = Flask(__name__,
@@ -43,5 +43,6 @@ def create_app(test_config=None):
     app.register_blueprint(auth)
     app.register_blueprint(bookmarks)
     app.register_blueprint(videos)
+    app.register_blueprint(admin)
     
     return app

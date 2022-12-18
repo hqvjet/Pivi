@@ -11,90 +11,85 @@ import json
 
 admin = Blueprint("admin",__name__,url_prefix="/api/v1/admin")
 
-@admin.post('/create-video')
+@admin.get('/get_all_users')
 @jwt_required()
-def create_videos():
-    title = request.json['title']
-    description = request.json['description']
-    user_id = get_jwt_identity()
-    url = request.json['url']
-    id = uuid.uuid4();
-    
-    videos = Videos(id = id,url=url ,title=title, description=description, user_id=user_id)
-    db.session.add(videos)
+def get_all_users():
+    users = Users.query.all()
+    users_list = []
+    for user in users:
+        users_list.append({
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'role': user.role
+        })
+    return jsonify({
+        "users": users_list
+    }), HTTP_200_OK
+
+@admin.patch('/update_user/<id>')
+@jwt_required()
+def update_user(id):
+    admin = Users.query.filter_by(id=get_jwt_identity()).first()
+    if admin.role != "admin" and get_jwt_identity() != id:
+        return jsonify({'error': "You are not admin"}), HTTP_401_UNAUTHORIZED
+
+    user = Users.query.filter_by(id=id).first()
+    if user is None:
+        return jsonify({'error': "User not found"}), HTTP_400_BAD_REQUEST
+
+    for key in request.json:
+        if key == "username":
+            username = request.json[key]
+            if len(username) < 3:
+                return jsonify({'error': "User is too short"}), HTTP_400_BAD_REQUEST
+            if not username.isalnum() or " " in username:
+                return jsonify({'error': "Username should be alphanumeric, also no spaces"}), HTTP_400_BAD_REQUEST
+            if Users.query.filter_by(username=username).first() is not None and user.username != username:
+                return jsonify({'error': "username is taken"}), HTTP_409_CONFLICT
+            user.username = username
+        elif key == "email":
+            email = request.json[key]
+            if not validators.email(email):
+                return jsonify({'error': "Email is not valid"}), HTTP_400_BAD_REQUEST
+            if Users.query.filter_by(email=email).first() is not None and user.email != email:
+                return jsonify({'error': "Email is taken"}), HTTP_409_CONFLICT
+            user.email = email
+        elif key == "role":
+            role = request.json[key]
+            if role != "admin" and role != "user":
+                return jsonify({'error': "Role is not valid"}), HTTP_400_BAD_REQUEST
+            user.role = role
+        else:
+            return jsonify({'error': "Invalid key"}), HTTP_400_BAD_REQUEST
+
     db.session.commit()
 
     return jsonify({
-        'message': "Videos created",
-        'videos': {
-            'title': title, "id": id
+        'message': "User updated",
+        'user': {
+            'username': user.username, "email": user.email, "role": user.role
         }
+        }), HTTP_200_OK
 
-    }), HTTP_201_CREATED
-
-@admin.post('/like')
+@admin.delete('/delete_user/<id>')
 @jwt_required()
-def like():
-    user_id = get_jwt_identity()
-    videos_id = request.json['video_id']
-    
-    user = Users.query.filter_by(id = user_id).first()
-    video = Videos.query.filter_by(id=videos_id).first()
-    
-    video.likes.append(user)
-    
+def delete_user(id):
+    admin = Users.query.filter_by(id=get_jwt_identity()).first()
+    if admin.role != "admin" and get_jwt_identity() != id:
+        return jsonify({'error': "You are not admin"}), HTTP_401_UNAUTHORIZED
+
+    user = Users.query.filter_by(id=id).first()
+    if user is None:
+        return jsonify({'error': "User not found"}), HTTP_400_BAD_REQUEST
+
+    db.session.query(Users).filter(Users.id==id).delete()
     db.session.commit()
+
     return jsonify({
-        'message': "Liked",
-    }), HTTP_201_CREATED
-
-@admin.get('/my-videos')
-@jwt_required()
-def my_videos():
-    user_id = get_jwt_identity()
-    user = Users.query.filter_by(id=user_id).first()
-    res = []
-    for video in user.video:
-        res.append({
-            'id':video.id,
-            'title':video.title,
-            'description':video.description,
-            'like':len(video.likes),
-            'create_at':str(video.create_at)
-        })
-    
-    print(user.video)
-    return jsonify(
-        admin=res,
-    ), HTTP_200_OK
-
-@admin.get('/search-video')
-def search():
-    search = request.args.get('keyword')
-    videos = Videos.query.filter(Videos.title.like(f"%{search}%")).all()
-    res = []
-    for video in videos:
-        res.append({
-            'id':video.id,
-            'title':video.title,
-            'description':video.description,
-            'like':len(video.likes),
-            'comment': 0,
-            'owner':video.user.username,
-            'watch': 0,
-            'create_at':str(video.create_at)
-        })
-    return jsonify(
-            res
-        ), HTTP_200_OK
-
-@admin.get('/search-user')
-def search():
-    search = request.args.get('keyword')
-    users = Users.query.filter(Users.username.like(f"%{search}%")).all()
-    return jsonify(
-            users
-        ), HTTP_200_OK
-
-
+        'message': "User deleted",
+        'user': {
+            'username': user.username, "email": user.email, "role": user.role
+        }
+        }), HTTP_200_OK
 

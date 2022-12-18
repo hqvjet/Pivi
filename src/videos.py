@@ -104,22 +104,27 @@ def all_videos():
         ), HTTP_200_OK
 
 # Update
-@videos.put('/update/<id>')
+@videos.patch('/update/<id>')
 @jwt_required()
 def update(id):
     user_id = get_jwt_identity()
+    user = Users.query.filter_by(id=user_id).first()
     video = Videos.query.filter_by(id=id).first()
     if video:
-        if video.user_id == user_id:
-            title = request.form['title']
-            description = request.form['description']
-            video.title = title
-            video.description = description
+        if video.user_id == user_id or user.role == "admin":
+            # title = request.form['title']
+            # description = request.form['description']
+            # video.title = title
+            # video.description = description
+
+            for key in request.json:
+                setattr(video, key, request.json[key])
+
             db.session.commit()
             return jsonify({
                 'message': "Videos updated",
                 'videos': {
-                    'title': title, "id": id
+                    "id": id
                 }
 
             }), HTTP_201_CREATED
@@ -138,10 +143,12 @@ def update(id):
 @jwt_required()
 def delete(id):
     user_id = get_jwt_identity()
+    user = Users.query.filter_by(id=user_id).first()
     video = Videos.query.filter_by(id=id).first()
     if video:
-        if video.user_id == user_id:
-            db.session.delete(video)
+        if video.user_id == user_id or user.role == "admin":
+            
+            db.session.query(Videos).filter(Videos.id == id).delete()
             db.session.commit()
             return jsonify({
                 'message': "Videos deleted",
