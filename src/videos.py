@@ -73,6 +73,7 @@ def liked_videos():
             "description": video.description,
             "url": video.url,
             "user_id": video.user_id,
+            "owner": video.user.username,
             "watch": video.watch,
             "likes": len(video.likes),
             "dislikes": len(video.dislikes),
@@ -297,7 +298,17 @@ def search():
 def video(id):
     video = Videos.query.filter_by(id=id).first()
     video.watch = video.watch + 1
+    
     db.session.commit()
+
+    comments = []
+    for comment in video.comments:
+        comments.append({
+            'id':comment.id,
+            'content':comment.content,
+            'user':comment.user.username,
+            'create_at':str(comment.create_at)
+        })
 
     return jsonify({
         'id':video.id,
@@ -305,7 +316,7 @@ def video(id):
         'description':video.description,
         'like':len(video.likes),
         'dislike':len(video.dislikes),
-        'comment': video.comments,
+        'comment': comments,
         'owner':video.user.username,
         'watch': video.watch,
         'create_at':str(video.create_at)
