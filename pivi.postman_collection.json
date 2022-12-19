@@ -564,6 +564,199 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "update-video",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3MTM3NDA3NywianRpIjoiZDZhY2FiMDgtNDhlZS00ZTY2LTk5ZjgtODQ4ODcxNjczMzUwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjY5MmYzODRkLTkwYTgtNDFkNC1iN2EzLTYyYTQ4Y2IwYzEyNSIsIm5iZiI6MTY3MTM3NDA3NywiZXhwIjoxNjcxNDYwNDc3fQ.PBDq5ESTw4Y5gYtM8BhJmt8Z4eWon5Z9awQa1VlqEf0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"description\": \"vanla bug game cuc manh 2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8070/api/v1/videos/update/2ea92198-0a07-4181-8985-371b89e30332",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"v1",
+						"videos",
+						"update",
+						"2ea92198-0a07-4181-8985-371b89e30332"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete-video",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8070/api/v1/videos/delete/2ea92198-0a07-4181-8985-371b89e30332",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"v1",
+						"videos",
+						"delete",
+						"2ea92198-0a07-4181-8985-371b89e30332"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-all-users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"\",\n    \"email\": \"\",\n    \"role\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8070/api/v1/admin/get_all_users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"v1",
+						"admin",
+						"get_all_users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin-update-user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"\",\n    \"email\": \"\",\n    \"role\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8070/api/v1/admin/update-user/<id>",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"v1",
+						"admin",
+						"update-user",
+						"<id>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin-update-user Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8070/api/v1/admin/delete-user/<id>",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"v1",
+						"admin",
+						"delete-user",
+						"<id>"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

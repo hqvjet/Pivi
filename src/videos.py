@@ -94,6 +94,7 @@ def all_videos():
             'title':video.title,
             'description':video.description,
             'like':len(video.likes),
+            'dislike':len(video.dislikes),
             'comment': len(video.comments),
             'owner':video.user.username,
             'watch': video.watch,
@@ -247,7 +248,7 @@ def comment():
     videos_id = request.json['video_id']
     content = request.json['content']
     id = uuid.uuid4();
-    comment = Comments(id=id, user_id=user_id, video_id=videos_id, content=content)
+    comment = Comments( id=id, user_id=user_id, video_id=videos_id, content=content )
     db.session.add(comment)
     db.session.commit()
     return jsonify({
@@ -290,6 +291,7 @@ def search():
             'title':video.title,
             'description':video.description,
             'like':len(video.likes),
+            'dislike':len(video.dislikes),
             'comment': 0,
             'owner':video.user.username,
             'watch': video.watch,
