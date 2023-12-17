@@ -112,5 +112,3 @@ class Comments(db.Model):
 
     create_at = db.Column(db.DateTime(), default = datetime.now())
     update_at = db.Column(db.DateTime(), onupdate = datetime.now())
-
-

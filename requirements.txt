@@ -4,3 +4,4 @@ flask_sqlalchemy==3.0.2
 SQLAlchemy==1.4.44
 validators==0.20.0
 Werkzeug==2.2.2
+mysqlclient

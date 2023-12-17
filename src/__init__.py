@@ -8,9 +8,10 @@ from src.database import db
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
 
+
 def create_app(test_config=None):
     app = Flask(__name__,
-    instance_relative_config=True)
+                instance_relative_config=True)
 
     if test_config is None:
         app.config.from_mapping(
@@ -27,7 +28,7 @@ def create_app(test_config=None):
 
     @app.get("/")
     def index():
-        
+
         return "Hello";
 
     @app.get("/hello")
@@ -36,13 +37,12 @@ def create_app(test_config=None):
 
     db.app = app
     db.init_app(app)
-    
-    
+
     JWTManager(app)
-    
+
     app.register_blueprint(auth)
     app.register_blueprint(bookmarks)
     app.register_blueprint(videos)
     app.register_blueprint(admin)
-    
+
     return app
